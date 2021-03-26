@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessageContainer, ErrorSummary } from "../../services/errorMessageComponents/errorMessage";
 import { ErrorMessage } from "@hookform/error-message";
@@ -8,55 +8,40 @@ import {ErrorComponent} from "../common/errorComponent";
 export const RegisterForm = () => {
     const { register, handleSubmit, errors, getValues } = useForm();
     const [success, setSuccess] = useState({
-       hasSuccess: false,
-       message: "" ,
+        hasSuccess: false,
+        message: "" ,
     });
     const [error, setError] = useState({
         hasError: false,
         errorMessage: "",
     });
-    const url = "api/auth/register";
-
 
     const onSubmit = (data, e) => {
-        console.log(data);
         e.target.reset();
-        fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                "Content-Type":"application/json"
-            }
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                const statusCode = result.statusCode.toString();
-                if (statusCode.match(/^[23]\d{2}$/)) {
-                    setSuccess({
-                        hasSuccess: true,
-                        message: result.message,
-                    });
-                    setTimeout(() => {
-                        setSuccess({
-                            hasSuccess: false,
-                            message: "",
-                        });
-                    }, 3000);
-                } else {
-                   setError({
-                       hasError: true,
-                       errorMessage: result.message,
-                   });
-                    setTimeout(() => {
-                        setError({
-                            hasError: false,
-                            errorMessage: "",
-                        });
-                    }, 3000);
-                }
-            })
-            .catch((err) => console.log(err))
-    };
+        if (data) {
+            setSuccess({
+                hasSuccess: true,
+                message: "You are successfully login",
+            });
+            setTimeout(() => {
+                setSuccess({
+                    hasSuccess: false,
+                    message: "",
+                });
+            }, 3000);
+        } else {
+            setError({
+                hasError: true,
+                errorMessage: "Oops, something went wrong..",
+            });
+            setTimeout(() => {
+                setError({
+                    hasError: false,
+                    errorMessage: "",
+                });
+            }, 3000);
+        }
+    }
 
     return (
         <section className="w-full mx-auto">
@@ -127,7 +112,7 @@ export const RegisterForm = () => {
                         </div>
                         <ErrorSummary errors={errors} as={<ErrorSummary/>}/>
                         {
-                            success.hasSuccess && (<SuccessComponent props={"register"} />)
+                            success.hasSuccess && (<SuccessComponent message={success.message} />)
                         }
                         {
                             error.hasError && (<ErrorComponent message={error.errorMessage} />)

@@ -16,37 +16,33 @@ export const LoginForm = () => {
         hasError: false,
         errorMessage: "",
     });
-
-    const url = "api/auth/login";
-
+    console.log(success.message)
     const onSubmit = async (data, e) => {
         e.target.reset();
-      await  fetch(url, {
-            method: 'POST',
-            body: JSON.stringify(data),
-            headers: {
-                "Accept": "application/json",
-                "Content-Type":"application/json"
-            }
-        })
-            .then((res) => res.json())
-            .then((result) => {
-                const statusCode = result.statusCode.toString();
-                if (statusCode.match(/^[23]\d{2}$/)) {
-                    setSuccess({
-                        hasSuccess: true,
-                        message: result.message,
-                    });
-                } else {
-                    setError({
-                        hasError: true,
-                        errorMessage: result.message,
-                    });
-                }
-            })
-            .catch((err) => console.log(err))
-    };
-
+        if (data) {
+            setSuccess({
+                hasSuccess: true,
+                message: "You are successfully login",
+            });
+            setTimeout(() => {
+                setSuccess({
+                    hasSuccess: false,
+                    message: "",
+                });
+            }, 3000);
+        } else {
+            setError({
+                hasError: true,
+                errorMessage: "Oops, something went wrong..",
+            });
+            setTimeout(() => {
+                setError({
+                    hasError: false,
+                    errorMessage: "",
+                });
+            }, 3000);
+        }
+    }
 
     return (
         <section className="w-full">
@@ -100,7 +96,7 @@ export const LoginForm = () => {
                         </div>
                         <ErrorSummary errors={errors} as={<ErrorSummary/>}/>
                         {
-                            success.hasSuccess && (<SuccessComponent props={"login"} />)
+                            success.hasSuccess && (<SuccessComponent message={success.message} />)
                         }
                         {
                             error.hasError && (<ErrorComponent message={error.errorMessage} />)
