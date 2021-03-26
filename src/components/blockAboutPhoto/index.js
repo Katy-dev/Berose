@@ -21,7 +21,7 @@ export const BlockAboutPhoto = () => {
                 {
                     photoList.map((item, index) => {
                         return (
-                            <div className="wrapper_img relative max-w-md h-full overflow-hidden">
+                            <div key={index} className="wrapper_img relative max-w-md h-full overflow-hidden">
                                 <div>
                                     <img className="img w-full h-auto transform duration-500 transition-all ease-out"
                                          src={item} alt="photo"/>
